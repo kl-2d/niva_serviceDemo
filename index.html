@@ -1,191 +1,790 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>НИВА СЕРВИС — Демо-версия</title>
+<!doctype html>
+<html lang="ru" className="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>НИВА СЕРВИС - Комплексный ремонт автомобилей НИВА - Демо</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        /* Кастомные настройки темы под "Брутальный оффроуд" */
-        body {
-            background-color: #f5f5f4; /* stone-100 */
-            color: #1c1917; /* stone-900 */
-            font-family: sans-serif;
-        }
-        .accent-green { color: #064e3b; } /* emerald-900 */
-        .btn-amber {
-            background-color: #f59e0b; /* amber-500 */
-            color: #1c1917;
-            font-weight: bold;
-            transition: all 0.2s;
-        }
-        .btn-amber:hover {
-            background-color: #d97706; /* amber-600 */
-        }
-        .card {
-            background-color: white;
-            border: 1px solid #e7e5e4; /* stone-200 */
-            border-radius: 0.5rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
+      body {
+        font-family: "Inter", sans-serif;
+      }
+      .hide-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .hide-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
     </style>
-</head>
-<body>
-
-    <nav class="sticky top-0 z-50 bg-white border-b border-stone-200 shadow-sm px-6 py-4 flex justify-between items-center">
-        <div class="text-2xl font-black tracking-tighter emerald-900">НИВА СЕРВИС</div>
-        <div class="hidden md:flex space-x-8 font-medium text-stone-700">
-            <a href="#" class="hover:text-emerald-800">Главная</a>
-            <a href="#" class="hover:text-emerald-800" onclick="showStub('Переход в каталог услуг')">Услуги</a>
-            <a href="#" class="hover:text-emerald-800" onclick="showStub('Раздел О нас')">О нас</a>
+    <!-- Tailwind Config for Demo -->
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {},
+        },
+      };
+    </script>
+  </head>
+  <body
+    class="antialiased flex flex-col min-h-screen bg-stone-100 text-stone-900"
+  >
+    <!-- Navbar -->
+    <nav
+      class="fixed w-full z-50 top-0 start-0 border-b border-stone-200 bg-white/80 backdrop-blur-md"
+    >
+      <div
+        class="max-w-7xl mx-auto flex flex-wrap items-center justify-between p-4"
+      >
+        <a href="#" class="flex items-center space-x-2">
+          <span
+            class="self-center text-xl font-bold whitespace-nowrap text-stone-900 uppercase tracking-wider"
+          >
+            Нива Сервис
+          </span>
+        </a>
+        <div class="flex md:order-2 space-x-3 items-center">
+          <div class="hidden lg:flex items-center gap-2 text-stone-700">
+            <i data-lucide="phone" class="w-4 h-4 text-emerald-800"></i>
+            <a
+              href="tel:+79202295656"
+              class="font-medium hover:text-emerald-800 transition-colors"
+            >
+              +7 920 229-56-56
+            </a>
+          </div>
+          <button
+            type="button"
+            onclick="openModal()"
+            class="text-stone-900 font-bold hover:bg-amber-600 border border-transparent bg-amber-500 transition-colors focus:ring-4 focus:outline-none focus:ring-amber-300 rounded-lg text-sm px-4 py-2 text-center shadow-sm"
+          >
+            Заказать звонок
+          </button>
+          <button
+            type="button"
+            onclick="toggleMenu()"
+            class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-stone-500 rounded-lg md:hidden hover:bg-stone-100 focus:outline-none focus:ring-2 focus:ring-stone-200"
+          >
+            <span class="sr-only">Open main menu</span>
+            <i data-lucide="menu" class="w-5 h-5" id="menu-icon-open"></i>
+            <i data-lucide="x" class="w-5 h-5 hidden" id="menu-icon-close"></i>
+          </button>
         </div>
-        <div class="flex items-center space-x-4">
-            <span class="hidden sm:inline font-bold text-stone-900">+7 (900) 000-00-00</span>
-            <button onclick="showStub('Заказать обратный звонок')" class="btn-amber px-4 py-2 rounded text-sm uppercase">Обратный звонок</button>
+        <div
+          class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
+          id="navbar-sticky"
+        >
+          <ul
+            class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-stone-200 rounded-lg bg-white md:space-x-8 md:flex-row md:mt-0 md:border-0 md:bg-transparent w-full"
+          >
+            <li>
+              <a
+                href="#"
+                class="block py-2 px-3 text-stone-700 rounded hover:bg-stone-50 md:hover:bg-transparent md:hover:text-emerald-800 md:p-0 transition-colors"
+                >Главная</a
+              >
+            </li>
+            <li>
+              <a
+                href="#services-preview"
+                class="block py-2 px-3 text-stone-700 rounded hover:bg-stone-50 md:hover:bg-transparent md:hover:text-emerald-800 md:p-0 transition-colors"
+                >Услуги и цены</a
+              >
+            </li>
+            <li>
+              <a
+                href="#contacts"
+                class="block py-2 px-3 text-stone-700 rounded hover:bg-stone-50 md:hover:bg-transparent md:hover:text-emerald-800 md:p-0 transition-colors"
+                >О нас</a
+              >
+            </li>
+            <li class="md:hidden mt-4 pt-4 border-t border-stone-200">
+              <a
+                href="tel:+79202295656"
+                class="flex items-center gap-2 py-2 px-3 text-stone-900 font-medium"
+              >
+                <i data-lucide="phone" class="w-4 h-4 text-emerald-800"></i>
+                +7 920 229-56-56
+              </a>
+              <a
+                href="tel:+74732361818"
+                class="flex items-center gap-2 py-2 px-3 text-stone-700 font-medium text-sm"
+              >
+                <i data-lucide="phone" class="w-4 h-4 text-emerald-800"></i>
+                +7 473 236-18-18
+              </a>
+            </li>
+          </ul>
         </div>
+      </div>
     </nav>
 
-    <header class="relative h-[600px] flex items-center justify-center text-center px-4 bg-stone-800">
-        <div class="absolute inset-0 opacity-40 bg-[url('https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&q=80&w=2070')] bg-cover bg-center"></div>
-        <div class="relative z-10 max-w-3xl">
-            <h1 class="text-5xl md:text-6xl font-black text-white mb-6 uppercase tracking-tight">Ремонт и подготовка НИВА 4х4</h1>
-            <p class="text-xl text-stone-200 mb-8">Профессиональный сервис внедорожников в Воронеже. 15 лет опыта, собственные патенты и гарантия на все работы.</p>
-            <button onclick="showStub('Открыть форму записи на ремонт')" class="btn-amber text-lg px-10 py-4 rounded-lg shadow-xl uppercase">Записаться на сервис</button>
-        </div>
-    </header>
+    <!-- Modal Simulation -->
+    <div id="request-modal" class="fixed inset-0 z-[100] hidden">
+      <div
+        class="absolute inset-0 bg-stone-900/60 backdrop-blur-sm transition-opacity"
+        onclick="closeModal()"
+      ></div>
+      <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+        <div
+          class="flex min-h-full items-center justify-center p-4 text-center sm:p-0"
+        >
+          <div
+            class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg"
+          >
+            <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4 relative">
+              <button
+                onclick="closeModal()"
+                class="absolute right-4 top-4 text-stone-400 hover:text-stone-600 transition-colors"
+              >
+                <i data-lucide="x" class="h-6 w-6"></i>
+              </button>
+              <div class="sm:flex sm:items-start">
+                <div
+                  class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left w-full"
+                >
+                  <h3 class="text-2xl font-bold leading-6 text-stone-900 mb-2">
+                    Заказать звонок
+                  </h3>
+                  <p class="text-sm text-stone-600 mb-6">
+                    Оставьте свои контакты, и мы перезвоним вам в течение 15
+                    минут.
+                  </p>
 
-    <section class="max-w-6xl mx-auto -mt-16 relative z-20 grid grid-cols-1 md:grid-cols-4 gap-4 px-4">
-        <div class="card p-6 text-center">
-            <div class="text-3xl font-bold text-emerald-800 mb-1">15 лет</div>
-            <div class="text-stone-500 text-sm uppercase font-semibold">Опыта работы</div>
-        </div>
-        <div class="card p-6 text-center">
-            <div class="text-3xl font-bold text-emerald-800 mb-1">1000+</div>
-            <div class="text-stone-500 text-sm uppercase font-semibold">Клиентов</div>
-        </div>
-        <div class="card p-6 text-center">
-            <div class="text-3xl font-bold text-emerald-800 mb-1">5 шт</div>
-            <div class="text-stone-500 text-sm uppercase font-semibold">Патентов</div>
-        </div>
-        <div class="card p-6 text-center">
-            <div class="text-3xl font-bold text-emerald-800 mb-1">100%</div>
-            <div class="text-stone-500 text-sm uppercase font-semibold">Гарантия</div>
-        </div>
-    </section>
-
-    <section class="max-w-6xl mx-auto py-20 px-4">
-        <h2 class="text-3xl font-black mb-12 uppercase text-center">Основные услуги</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="card overflow-hidden">
-                <div class="h-48 bg-stone-200 bg-[url('https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?auto=format&fit=crop&q=80&w=1000')] bg-cover"></div>
-                <div class="p-6">
-                    <h3 class="text-xl font-bold mb-2">Ремонт двигателя</h3>
-                    <p class="text-stone-600 mb-4 text-sm">Капитальный ремонт, замена ГРМ, настройка систем впрыска.</p>
-                    <div class="flex justify-between items-center">
-                        <span class="font-black text-emerald-800">от 5 000 ₽</span>
-                        <button onclick="showStub('Добавление услуги «Ремонт двигателя» в корзину')" class="btn-amber px-3 py-1 rounded text-xs uppercase">В корзину</button>
+                  <form
+                    onsubmit="
+                      event.preventDefault();
+                      alert('Демо: заявка отправлена!');
+                      closeModal();
+                    "
+                    class="space-y-4"
+                  >
+                    <div>
+                      <label
+                        for="name"
+                        class="block text-sm font-medium text-stone-700 mb-1"
+                        >Имя</label
+                      >
+                      <input
+                        type="text"
+                        id="name"
+                        required
+                        class="w-full px-4 py-3 rounded-lg border border-stone-200 focus:ring-2 focus:ring-emerald-500 outline-none transition-colors"
+                        placeholder="Иван Иваноович"
+                      />
                     </div>
-                </div>
-            </div>
-            <div class="card overflow-hidden">
-                <div class="h-48 bg-stone-200 bg-[url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=80&w=1000')] bg-cover"></div>
-                <div class="p-6">
-                    <h3 class="text-xl font-bold mb-2">Подвеска и трансмиссия</h3>
-                    <p class="text-stone-600 mb-4 text-sm">Усиление мостов, лифт подвески, ремонт раздаточных коробок.</p>
-                    <div class="flex justify-between items-center">
-                        <span class="font-black text-emerald-800">от 3 500 ₽</span>
-                        <button onclick="showStub('Добавление услуги «Подвеска» в корзину')" class="btn-amber px-3 py-1 rounded text-xs uppercase">В корзину</button>
+                    <div>
+                      <label
+                        for="phone"
+                        class="block text-sm font-medium text-stone-700 mb-1"
+                        >Телефон</label
+                      >
+                      <input
+                        type="tel"
+                        id="phone"
+                        required
+                        class="w-full px-4 py-3 rounded-lg border border-stone-200 focus:ring-2 focus:ring-emerald-500 outline-none transition-colors"
+                        placeholder="+7 (999) 000-00-00"
+                      />
                     </div>
+                    <button
+                      type="submit"
+                      class="w-full py-4 px-6 bg-emerald-700 hover:bg-emerald-800 text-white font-bold rounded-lg transition-colors flex items-center justify-center gap-2"
+                    >
+                      Жду звонка
+                    </button>
+                  </form>
                 </div>
+              </div>
             </div>
-            <div class="card overflow-hidden">
-                <div class="h-48 bg-stone-200 bg-[url('https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&q=80&w=1000')] bg-cover"></div>
-                <div class="p-6">
-                    <h3 class="text-xl font-bold mb-2">ТО и диагностика</h3>
-                    <p class="text-stone-600 mb-4 text-sm">Комплексная проверка перед выездом на бездорожье.</p>
-                    <div class="flex justify-between items-center">
-                        <span class="font-black text-emerald-800">от 1 500 ₽</span>
-                        <button onclick="showStub('Добавление услуги «Диагностика» в корзину')" class="btn-amber px-3 py-1 rounded text-xs uppercase">В корзину</button>
-                    </div>
-                </div>
-            </div>
+          </div>
         </div>
-        <div class="mt-12 text-center">
-            <button onclick="showStub('Переход на полную страницу каталога услуг')" class="text-emerald-800 font-bold border-b-2 border-emerald-800 hover:text-emerald-600">Смотреть весь прайс-лист</button>
-        </div>
-    </section>
-
-    <section class="bg-white py-20 px-4 border-y border-stone-200">
-        <div class="max-w-6xl mx-auto">
-            <h2 class="text-3xl font-black mb-12 uppercase text-center">Как мы работаем</h2>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-                <div class="text-center">
-                    <div class="w-12 h-12 bg-stone-100 rounded-full flex items-center justify-center mx-auto mb-4 font-bold text-emerald-800 border border-stone-200">1</div>
-                    <div class="font-bold text-sm">Звонок или заявка</div>
-                </div>
-                <div class="text-center">
-                    <div class="w-12 h-12 bg-stone-100 rounded-full flex items-center justify-center mx-auto mb-4 font-bold text-emerald-800 border border-stone-200">2</div>
-                    <div class="font-bold text-sm">Диагностика</div>
-                </div>
-                <div class="text-center">
-                    <div class="w-12 h-12 bg-stone-100 rounded-full flex items-center justify-center mx-auto mb-4 font-bold text-emerald-800 border border-stone-200">3</div>
-                    <div class="font-bold text-sm">Согласование цены</div>
-                </div>
-                <div class="text-center">
-                    <div class="w-12 h-12 bg-stone-100 rounded-full flex items-center justify-center mx-auto mb-4 font-bold text-emerald-800 border border-stone-200">4</div>
-                    <div class="font-bold text-sm">Качественный ремонт</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <footer class="bg-stone-900 text-white py-12 px-6">
-        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
-            <div>
-                <div class="text-xl font-black mb-4">НИВА СЕРВИС</div>
-                <p class="text-stone-400 text-sm">Ваш надежный партнер в мире 4х4. Мы знаем о Нивах всё.</p>
-            </div>
-            <div>
-                <div class="font-bold mb-4 uppercase text-stone-300">Контакты</div>
-                <p class="text-stone-400 text-sm mb-2">г. Воронеж, ул. Автомобилистов, 10</p>
-                <p class="text-stone-400 text-sm">Пн-Сб: 09:00 — 19:00</p>
-            </div>
-            <div>
-                <div class="font-bold mb-4 uppercase text-stone-300">Социальные сети</div>
-                <div class="flex space-x-4">
-                    <button onclick="showStub('Переход в VK')" class="text-stone-400 hover:text-white">VK</button>
-                    <button onclick="showStub('Переход в YouTube')" class="text-stone-400 hover:text-white">YouTube</button>
-                    <button onclick="showStub('Переход в Telegram')" class="text-stone-400 hover:text-white">Telegram</button>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <div id="stubModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-        <div class="bg-white rounded-xl max-w-sm w-full p-8 text-center shadow-2xl border-4 border-amber-500">
-            <div class="text-4xl mb-4">⚙️</div>
-            <h3 class="text-2xl font-black mb-2 uppercase">ДЕМО-РЕЖИМ</h3>
-            <p id="stubText" class="text-stone-600 mb-6">Эта функция будет доступна в финальной версии сайта.</p>
-            <button onclick="closeStub()" class="btn-amber w-full py-3 rounded-lg uppercase">Понятно</button>
-        </div>
+      </div>
     </div>
 
+    <!-- Main Content -->
+    <main class="flex-grow pt-[72px]">
+      <!-- Hero Section -->
+      <section
+        class="relative min-h-[90vh] flex items-center justify-center overflow-hidden"
+      >
+        <div
+          class="absolute inset-0 bg-stone-100 bg-cover bg-center bg-no-repeat"
+          style="
+            background-image: url(&quot;https://images.unsplash.com/photo-1625047509168-a7026f36de04?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80&quot;);
+          "
+        >
+          <div
+            class="absolute inset-0 bg-stone-100/80 backdrop-blur-[2px]"
+          ></div>
+        </div>
+        <div
+          class="relative z-10 max-w-7xl mx-auto px-4 w-full pt-16 pb-24 text-center"
+        >
+          <div class="max-w-4xl mx-auto animate-[fadeIn_0.8s_ease-out]">
+            <div
+              class="mb-6 inline-flex items-center gap-2 px-3 py-1 text-sm font-medium text-stone-800 bg-stone-200 border border-stone-300 rounded-full shadow-sm"
+            >
+              <span class="relative flex h-2 w-2">
+                <span
+                  class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"
+                ></span>
+                <span
+                  class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"
+                ></span>
+              </span>
+              Работаем для вас с 2008 года
+            </div>
+            <h1
+              class="text-4xl md:text-5xl lg:text-7xl font-bold text-stone-900 mb-6 uppercase tracking-tight leading-tight"
+            >
+              Комплексный ремонт автомобилей
+              <span
+                class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-800 to-emerald-500"
+                >НИВА</span
+              >
+              и CHEVROLET NIVA
+            </h1>
+            <p
+              class="text-lg md:text-2xl text-stone-700 mb-10 max-w-2xl mx-auto font-light"
+            >
+              В единственном специализированном сервисе Воронежа. Качество,
+              проверенное временем.
+            </p>
+            <div
+              class="flex flex-col sm:flex-row items-center justify-center gap-4"
+            >
+              <button
+                onclick="openModal()"
+                class="w-full sm:w-auto px-8 py-4 bg-amber-500 hover:bg-amber-600 text-stone-900 rounded-lg font-bold text-lg transition-all transform hover:scale-105 hover:shadow-lg flex items-center justify-center gap-2"
+              >
+                Бесплатная диагностика
+                <i data-lucide="chevron-right" class="w-5 h-5"></i>
+              </button>
+              <a
+                href="#services-preview"
+                class="w-full sm:w-auto px-8 py-4 bg-stone-50 hover:bg-stone-200 text-stone-900 rounded-lg font-medium text-lg transition-colors border border-stone-300 shadow-sm"
+              >
+                Наши услуги
+              </a>
+            </div>
+          </div>
+        </div>
+        <div
+          class="absolute bottom-0 w-full h-32 bg-gradient-to-t from-stone-50 to-transparent z-10"
+        ></div>
+      </section>
+
+      <!-- Statistics Section -->
+      <section class="py-20 bg-stone-100 border-b border-stone-200">
+        <div class="max-w-7xl mx-auto px-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            <!-- Stat 1 -->
+            <div
+              class="flex flex-col items-center justify-center p-6 bg-white rounded-2xl border border-stone-200 hover:border-emerald-200 transition-colors group shadow-sm hover:shadow"
+            >
+              <div
+                class="p-4 rounded-full bg-stone-50 border border-stone-100 mb-4 group-hover:bg-white transition-colors text-emerald-800"
+              >
+                <i data-lucide="shield-check" class="w-8 h-8"></i>
+              </div>
+              <h3
+                class="text-4xl md:text-5xl font-bold text-stone-900 mb-2 font-mono tabular-nums"
+              >
+                100%
+              </h3>
+              <p
+                class="text-stone-500 text-center uppercase tracking-wider text-sm font-medium"
+              >
+                гарантия качества
+              </p>
+            </div>
+            <!-- Stat 2 -->
+            <div
+              class="flex flex-col items-center justify-center p-6 bg-white rounded-2xl border border-stone-200 hover:border-emerald-200 transition-colors group shadow-sm hover:shadow"
+            >
+              <div
+                class="p-4 rounded-full bg-stone-50 border border-stone-100 mb-4 group-hover:bg-white transition-colors text-emerald-700"
+              >
+                <i data-lucide="calendar" class="w-8 h-8"></i>
+              </div>
+              <h3
+                class="text-4xl md:text-5xl font-bold text-stone-900 mb-2 font-mono tabular-nums"
+              >
+                15 лет
+              </h3>
+              <p
+                class="text-stone-500 text-center uppercase tracking-wider text-sm font-medium"
+              >
+                успешной работы
+              </p>
+            </div>
+            <!-- Stat 3 -->
+            <div
+              class="flex flex-col items-center justify-center p-6 bg-white rounded-2xl border border-stone-200 hover:border-emerald-200 transition-colors group shadow-sm hover:shadow"
+            >
+              <div
+                class="p-4 rounded-full bg-stone-50 border border-stone-100 mb-4 group-hover:bg-white transition-colors text-stone-600"
+              >
+                <i data-lucide="users" class="w-8 h-8"></i>
+              </div>
+              <h3
+                class="text-4xl md:text-5xl font-bold text-stone-900 mb-2 font-mono tabular-nums"
+              >
+                10
+              </h3>
+              <p
+                class="text-stone-500 text-center uppercase tracking-wider text-sm font-medium"
+              >
+                высококлассных специалистов
+              </p>
+            </div>
+            <!-- Stat 4 -->
+            <div
+              class="flex flex-col items-center justify-center p-6 bg-white rounded-2xl border border-stone-200 hover:border-emerald-200 transition-colors group shadow-sm hover:shadow"
+            >
+              <div
+                class="p-4 rounded-full bg-stone-50 border border-stone-100 mb-4 group-hover:bg-white transition-colors text-stone-800"
+              >
+                <i data-lucide="wrench" class="w-8 h-8"></i>
+              </div>
+              <h3
+                class="text-4xl md:text-5xl font-bold text-stone-900 mb-2 font-mono tabular-nums"
+              >
+                2000+
+              </h3>
+              <p
+                class="text-stone-500 text-center uppercase tracking-wider text-sm font-medium"
+              >
+                выполненных заказов в год
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Services Preview Section -->
+      <section class="py-24 bg-stone-100" id="services-preview">
+        <div class="max-w-7xl mx-auto px-4">
+          <div class="text-center mb-16">
+            <h2
+              class="text-3xl md:text-5xl font-bold text-stone-900 mb-6 uppercase tracking-tight"
+            >
+              Направления ремонта
+            </h2>
+            <div class="h-1 bg-emerald-800 mx-auto rounded-full w-20"></div>
+          </div>
+
+          <div
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12"
+          >
+            <div
+              class="bg-white border border-stone-200 hover:border-emerald-300 rounded-xl p-6 transition-all group hover:-translate-y-1 shadow-sm hover:shadow-md flex flex-col items-start"
+            >
+              <div
+                class="w-12 h-12 bg-stone-50 border border-stone-100 rounded-lg flex items-center justify-center mb-6 group-hover:bg-emerald-50 transition-colors"
+              >
+                <i data-lucide="car" class="w-6 h-6 text-emerald-800"></i>
+              </div>
+              <h3
+                class="text-xl font-bold text-stone-900 mb-3 group-hover:text-emerald-800 transition-colors"
+              >
+                Ремонт ходовой
+              </h3>
+              <p class="text-stone-700 leading-relaxed text-sm">
+                Комплексная диагностика и ремонт подвески для уверенной езды по
+                бездорожью.
+              </p>
+            </div>
+
+            <div
+              class="bg-white border border-stone-200 hover:border-emerald-300 rounded-xl p-6 transition-all group hover:-translate-y-1 shadow-sm hover:shadow-md flex flex-col items-start"
+            >
+              <div
+                class="w-12 h-12 bg-stone-50 border border-stone-100 rounded-lg flex items-center justify-center mb-6 group-hover:bg-emerald-50 transition-colors"
+              >
+                <i data-lucide="settings" class="w-6 h-6 text-emerald-800"></i>
+              </div>
+              <h3
+                class="text-xl font-bold text-stone-900 mb-3 group-hover:text-emerald-800 transition-colors"
+              >
+                Ремонт двигателя
+              </h3>
+              <p class="text-stone-700 leading-relaxed text-sm">
+                Капитальный ремонт, замена ГРМ, поршневой группы. Используем
+                только оригинальные запчасти.
+              </p>
+            </div>
+
+            <div
+              class="bg-white border border-stone-200 hover:border-emerald-300 rounded-xl p-6 transition-all group hover:-translate-y-1 shadow-sm hover:shadow-md flex flex-col items-start"
+            >
+              <div
+                class="w-12 h-12 bg-stone-50 border border-stone-100 rounded-lg flex items-center justify-center mb-6 group-hover:bg-emerald-50 transition-colors"
+              >
+                <i data-lucide="wrench" class="w-6 h-6 text-emerald-800"></i>
+              </div>
+              <h3
+                class="text-xl font-bold text-stone-900 mb-3 group-hover:text-emerald-800 transition-colors"
+              >
+                Ремонт КПП
+              </h3>
+              <p class="text-stone-700 leading-relaxed text-sm">
+                Устранение шумов, хрустов, выбивания передач. Усиление коробок.
+              </p>
+            </div>
+
+            <div
+              class="bg-white border border-stone-200 hover:border-emerald-300 rounded-xl p-6 transition-all group hover:-translate-y-1 shadow-sm hover:shadow-md flex flex-col items-start"
+            >
+              <div
+                class="w-12 h-12 bg-stone-50 border border-stone-100 rounded-lg flex items-center justify-center mb-6 group-hover:bg-emerald-50 transition-colors"
+              >
+                <i data-lucide="activity" class="w-6 h-6 text-emerald-800"></i>
+              </div>
+              <h3
+                class="text-xl font-bold text-stone-900 mb-3 group-hover:text-emerald-800 transition-colors"
+              >
+                Ремонт раздатки
+              </h3>
+              <p class="text-stone-700 leading-relaxed text-sm">
+                Ремонт раздаточной коробки любой сложности. Центровка, замена
+                подшипников.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Process Timeline Section -->
+      <section
+        class="py-24 bg-stone-100 border-t border-stone-200 overflow-hidden"
+      >
+        <div class="max-w-7xl mx-auto px-4">
+          <div class="text-center mb-16">
+            <h2
+              class="text-3xl md:text-5xl font-bold text-stone-900 mb-6 uppercase tracking-tight"
+            >
+              Как мы работаем
+            </h2>
+            <div class="h-1 bg-emerald-800 mx-auto rounded-full w-20"></div>
+          </div>
+
+          <div class="relative">
+            <div
+              class="hidden lg:block absolute top-[44px] left-[5%] right-[5%] h-[2px] bg-emerald-200"
+            ></div>
+
+            <div
+              class="flex flex-col lg:flex-row justify-between items-start gap-8 lg:gap-4 relative z-10 w-full overflow-x-auto lg:overflow-visible pb-8 hide-scrollbar"
+            >
+              <!-- Step 1 -->
+              <div
+                class="flex flex-row lg:flex-col items-start lg:items-center min-w-[280px] lg:min-w-0 lg:w-40 shrink-0 group"
+              >
+                <div
+                  class="lg:hidden absolute left-12 w-[2px] h-20 bg-stone-200 -z-10 mt-16 ml-[-1px]"
+                ></div>
+                <div class="relative">
+                  <div
+                    class="w-24 h-24 lg:w-24 lg:h-24 rounded-full bg-white border border-stone-200 shadow-sm flex items-center justify-center shrink-0 hover:border-emerald-800 transition-colors z-20 relative"
+                  >
+                    <i
+                      data-lucide="message-square"
+                      class="w-8 h-8 text-emerald-800 group-hover:scale-110 transition-transform"
+                    ></i>
+                  </div>
+                  <div
+                    class="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-amber-500 flex items-center justify-center font-bold text-stone-900 text-sm border-4 border-stone-100 shadow-sm"
+                  >
+                    1
+                  </div>
+                </div>
+                <div class="ml-6 lg:ml-0 lg:mt-6 lg:text-center pt-2 lg:pt-0">
+                  <h3
+                    class="text-stone-900 font-bold mb-2 group-hover:text-emerald-800 transition-colors"
+                  >
+                    Заявка
+                  </h3>
+                  <p class="text-stone-700 text-sm leading-snug">
+                    Оставьте заявку на сайте или по телефону
+                  </p>
+                </div>
+              </div>
+
+              <!-- Step 2 -->
+              <div
+                class="flex flex-row lg:flex-col items-start lg:items-center min-w-[280px] lg:min-w-0 lg:w-40 shrink-0 group"
+              >
+                <div
+                  class="lg:hidden absolute left-12 w-[2px] h-20 bg-stone-200 -z-10 mt-16 ml-[-1px]"
+                ></div>
+                <div class="relative">
+                  <div
+                    class="w-24 h-24 lg:w-24 lg:h-24 rounded-full bg-white border border-stone-200 shadow-sm flex items-center justify-center shrink-0 hover:border-emerald-800 transition-colors z-20 relative"
+                  >
+                    <i
+                      data-lucide="phone-call"
+                      class="w-8 h-8 text-emerald-800 group-hover:scale-110 transition-transform"
+                    ></i>
+                  </div>
+                  <div
+                    class="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-amber-500 flex items-center justify-center font-bold text-stone-900 text-sm border-4 border-stone-100 shadow-sm"
+                  >
+                    2
+                  </div>
+                </div>
+                <div class="ml-6 lg:ml-0 lg:mt-6 lg:text-center pt-2 lg:pt-0">
+                  <h3
+                    class="text-stone-900 font-bold mb-2 group-hover:text-emerald-800 transition-colors"
+                  >
+                    Звонок мастера
+                  </h3>
+                  <p class="text-stone-700 text-sm leading-snug">
+                    Согласование удобного времени заезда
+                  </p>
+                </div>
+              </div>
+
+              <!-- Step 3 -->
+              <div
+                class="flex flex-row lg:flex-col items-start lg:items-center min-w-[280px] lg:min-w-0 lg:w-40 shrink-0 group"
+              >
+                <div
+                  class="lg:hidden absolute left-12 w-[2px] h-20 bg-stone-200 -z-10 mt-16 ml-[-1px]"
+                ></div>
+                <div class="relative">
+                  <div
+                    class="w-24 h-24 lg:w-24 lg:h-24 rounded-full bg-white border border-stone-200 shadow-sm flex items-center justify-center shrink-0 hover:border-emerald-800 transition-colors z-20 relative"
+                  >
+                    <i
+                      data-lucide="stethoscope"
+                      class="w-8 h-8 text-emerald-800 group-hover:scale-110 transition-transform"
+                    ></i>
+                  </div>
+                  <div
+                    class="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-amber-500 flex items-center justify-center font-bold text-stone-900 text-sm border-4 border-stone-100 shadow-sm"
+                  >
+                    3
+                  </div>
+                </div>
+                <div class="ml-6 lg:ml-0 lg:mt-6 lg:text-center pt-2 lg:pt-0">
+                  <h3
+                    class="text-stone-900 font-bold mb-2 group-hover:text-emerald-800 transition-colors"
+                  >
+                    Бесплатная диагностика
+                  </h3>
+                  <p class="text-stone-700 text-sm leading-snug">
+                    Комплексный осмотр ходовой и агрегатов
+                  </p>
+                </div>
+              </div>
+
+              <!-- Step 4 -->
+              <div
+                class="flex flex-row lg:flex-col items-start lg:items-center min-w-[280px] lg:min-w-0 lg:w-40 shrink-0 group"
+              >
+                <div
+                  class="lg:hidden absolute left-12 w-[2px] h-20 bg-stone-200 -z-10 mt-16 ml-[-1px]"
+                ></div>
+                <div class="relative">
+                  <div
+                    class="w-24 h-24 lg:w-24 lg:h-24 rounded-full bg-white border border-stone-200 shadow-sm flex items-center justify-center shrink-0 hover:border-emerald-800 transition-colors z-20 relative"
+                  >
+                    <i
+                      data-lucide="clipboard-list"
+                      class="w-8 h-8 text-emerald-800 group-hover:scale-110 transition-transform"
+                    ></i>
+                  </div>
+                  <div
+                    class="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-amber-500 flex items-center justify-center font-bold text-stone-900 text-sm border-4 border-stone-100 shadow-sm"
+                  >
+                    4
+                  </div>
+                </div>
+                <div class="ml-6 lg:ml-0 lg:mt-6 lg:text-center pt-2 lg:pt-0">
+                  <h3
+                    class="text-stone-900 font-bold mb-2 group-hover:text-emerald-800 transition-colors"
+                  >
+                    Дефектовка
+                  </h3>
+                  <p class="text-stone-700 text-sm leading-snug">
+                    Составление списка неисправностей
+                  </p>
+                </div>
+              </div>
+
+              <!-- Step 5 -->
+              <div
+                class="flex flex-row lg:flex-col items-start lg:items-center min-w-[280px] lg:min-w-0 lg:w-40 shrink-0 group"
+              >
+                <div class="relative">
+                  <div
+                    class="w-24 h-24 lg:w-24 lg:h-24 rounded-full bg-white border border-stone-200 shadow-sm flex items-center justify-center shrink-0 hover:border-emerald-800 transition-colors z-20 relative"
+                  >
+                    <i
+                      data-lucide="clock"
+                      class="w-8 h-8 text-emerald-800 group-hover:scale-110 transition-transform"
+                    ></i>
+                  </div>
+                  <div
+                    class="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-amber-500 flex items-center justify-center font-bold text-stone-900 text-sm border-4 border-stone-100 shadow-sm"
+                  >
+                    5
+                  </div>
+                </div>
+                <div class="ml-6 lg:ml-0 lg:mt-6 lg:text-center pt-2 lg:pt-0">
+                  <h3
+                    class="text-stone-900 font-bold mb-2 group-hover:text-emerald-800 transition-colors"
+                  >
+                    Ремонт и выдача
+                  </h3>
+                  <p class="text-stone-700 text-sm leading-snug">
+                    Своевременно и с гарантией
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer
+      class="bg-stone-900 border-t border-stone-800 pt-12 pb-8 text-white"
+      id="contacts"
+    >
+      <div class="max-w-7xl mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+          <div>
+            <h2
+              class="text-xl font-bold text-white uppercase tracking-wider mb-4"
+            >
+              Нива Сервис
+            </h2>
+            <p class="text-stone-300 mb-4 whitespace-pre-wrap">
+              Единственный специализированный сервис НИВА и CHEVROLET NIVA в
+              Воронеже.
+            </p>
+            <div class="text-sm text-stone-400">
+              <p>ОГРН 304366434500094</p>
+            </div>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold text-white mb-4">Контакты</h3>
+            <ul class="space-y-3">
+              <li class="flex items-start gap-3 text-stone-300">
+                <i
+                  data-lucide="map-pin"
+                  class="w-5 h-5 text-amber-500 shrink-0 mt-0.5"
+                ></i>
+                <span>г. Воронеж, ул. Матросова, 100</span>
+              </li>
+              <li class="flex flex-col gap-2">
+                <a
+                  href="tel:+79202295656"
+                  class="flex items-center gap-3 text-stone-300 hover:text-white transition-colors"
+                >
+                  <i
+                    data-lucide="phone"
+                    class="w-5 h-5 text-amber-500 shrink-0"
+                  ></i>
+                  <span class="font-medium">+7 920 229-56-56</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold text-white mb-4">Режим работы</h3>
+            <ul class="space-y-3">
+              <li class="flex items-start gap-3 text-stone-300">
+                <i
+                  data-lucide="clock"
+                  class="w-5 h-5 text-amber-500 shrink-0 mt-0.5"
+                ></i>
+                <div>
+                  <p>Пн-Пт: 9:00 - 18:00</p>
+                  <p>Сб: 10:00 - 16:00</p>
+                  <p class="text-stone-500 mt-1">Вс: Выходной</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div
+            class="h-48 lg:h-auto rounded-lg overflow-hidden border border-stone-700 relative bg-stone-800 shadow-sm"
+          >
+            <iframe
+              src="https://yandex.ru/map-widget/v1/?ll=39.158141%2C51.637505&mode=search&ol=geo&ouri=ymapsbm1%3A%2F%2Fgeo%3Fdata%3DCgg1NjQyMDk3NxJI0KDQvtGB0YHQuNGPLCDQktC-0YDQvtC90LXQtiwg0YPQu9C40YbQsCDQnNCw0YLRgNC-0YHQvtCy0LAsIDEwMCIKDQnQ_UEVX8BMQg%2C%2C&z=16.63"
+              width="100%"
+              height="100%"
+              frameborder="0"
+              allowfullscreen="true"
+              class="absolute inset-0"
+            ></iframe>
+          </div>
+        </div>
+        <div
+          class="border-t border-stone-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-stone-400"
+        >
+          <p>
+            © <span id="current-year"></span> Нива Сервис. Все права защищены.
+          </p>
+          <a href="#" class="hover:text-white transition-colors"
+            >Политика конфиденциальности</a
+          >
+        </div>
+      </div>
+    </footer>
+
+    <!-- Scripts -->
     <script>
-        function showStub(actionName) {
-            const modal = document.getElementById('stubModal');
-            const text = document.getElementById('stubText');
-            text.innerHTML = `Вы нажали на: <strong>${actionName}</strong>.<br><br>В полной версии здесь откроется соответствующее окно, данные будут отправлены менеджеру, а запись появится в базе данных и Google Таблицах.`;
-            modal.classList.remove('hidden');
-        }
+      // Init Lucide Icons
+      lucide.createIcons();
 
-        function closeStub() {
-            document.getElementById('stubModal').classList.add('hidden');
-        }
+      // Footer Year
+      document.getElementById("current-year").textContent =
+        new Date().getFullYear();
 
-        // Закрытие по клику на фон
-        document.getElementById('stubModal').addEventListener('click', function(e) {
-            if (e.target === this) closeStub();
-        });
+      // Mobile Menu Logic
+      const mobileMenu = document.getElementById("navbar-sticky");
+      const iconOpen = document.getElementById("menu-icon-open");
+      const iconClose = document.getElementById("menu-icon-close");
+      let isMenuOpen = false;
+
+      function toggleMenu() {
+        isMenuOpen = !isMenuOpen;
+        if (isMenuOpen) {
+          mobileMenu.classList.remove("hidden");
+          mobileMenu.classList.add("flex");
+          iconOpen.classList.add("hidden");
+          iconClose.classList.remove("hidden");
+        } else {
+          mobileMenu.classList.add("hidden");
+          mobileMenu.classList.remove("flex");
+          iconOpen.classList.remove("hidden");
+          iconClose.classList.add("hidden");
+        }
+      }
+
+      // Modal Logic
+      const modal = document.getElementById("request-modal");
+      function openModal() {
+        modal.classList.remove("hidden");
+      }
+      function closeModal() {
+        modal.classList.add("hidden");
+      }
     </script>
-</body>
+  </body>
 </html>
